@@ -1,0 +1,17 @@
+{
+    "name": "xorgxx/neox-seo-bundle",
+    "description": "simply seo for your project ",
+    "type": "symfony-bundle",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.1",
+        "symfony/framework-bundle": "6.3.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "NeoxSeo\\NeoxSeoBundle\\": "src/"
+        }
+    }
+}
