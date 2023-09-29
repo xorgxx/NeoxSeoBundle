@@ -1,5 +1,6 @@
 # NeoxSeoBundle { Symfony 6 }
 This bundle provides a simple and flexible to provide Seo functionality for developers.
+Tow way to use : 1 - Attribute 2 - Injection & 1+2 😉
 
 [![2023-09-29-12-02-44.png](https://i.postimg.cc/HnKB63d2/2023-09-29-12-02-44.png)](https://postimg.cc/kRQQ4QV6)
 ## Installation !!
@@ -135,7 +136,8 @@ If you want to contribute \(thank you!\) to this bundle, here are some guideline
     * You add a new feature
     * You see code that works but isn't covered by any tests \(there is a special place in heaven for you\)
 
-## Todo
-* !!!
+## Todo list
+* Breadcrumb 
+* Sitemap
 
 ## Thanks
