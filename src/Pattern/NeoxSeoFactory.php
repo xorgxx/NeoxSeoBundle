@@ -29,7 +29,7 @@
         }
         
         
-        public function SeoStrategy(): NeoxSeoService
+        public function setSeoService(): NeoxSeoService
         {
             return new NeoxSeoService($this->requestStack, $this->parameterBag);
         }
