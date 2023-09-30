@@ -10,22 +10,26 @@
      *
      *
      */
-    
     class NeoxSeoFactory
     {
-        public ParameterBagInterface   $parameterBag;
+        public ParameterBagInterface $parameterBag;
         private RequestStack $requestStack;
+        private NeoxSeoService $seoService;
         
-        public function __construct( ParameterBagInterface $parameterBag, RequestStack $requestStack )
+        public function __construct(ParameterBagInterface $parameterBag, RequestStack $requestStack, NeoxSeoService $seoService)
         {
-            $this->parameterBag         = $parameterBag;
-            $this->requestStack         = $requestStack;
+            $this->parameterBag = $parameterBag;
+            $this->requestStack = $requestStack;
+            $this->seoService   = $seoService;
+        }
+        
+        public function getSeoService(): NeoxSeoService
+        {
+            return $this->seoService;
         }
         
         
-        /**
-         * @throws \ReflectionException
-         */public function SeoStrategy(): NeoxSeoService
+        public function SeoStrategy(): NeoxSeoService
         {
             return new NeoxSeoService($this->requestStack, $this->parameterBag);
         }

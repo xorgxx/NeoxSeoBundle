@@ -25,6 +25,7 @@ services:
         class: NeoxSeo\NeoxSeoBundle\Pattern\NeoxSeoService
         arguments:
             - '@Symfony\Component\HttpFoundation\RequestStack'
+            - '@Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'
             
     NeoxSeo\NeoxSeoBundle\EventSubscriber\SeoSubscriber:
         tags:
