@@ -1,4 +1,4 @@
-# NeoxSeoBundle { Symfony 6 }
+# NeoxSeoBundle { Symfony 6 } BETA* only dev-master
 This bundle provides a simple and flexible to provide Seo functionality for developers.
 Tow way to use : 1 - Attribute 2 - Injection & 1+2 😉
 
