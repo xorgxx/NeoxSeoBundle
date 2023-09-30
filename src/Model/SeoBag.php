@@ -5,6 +5,8 @@
     class SeoBag
     {
         public ?string       $title          = "ko";
+        public ?string       $preFixTitle    = null;
+        public ?string       $surFixTitle    = null;
         public ?string       $charset        = '<meta charset="UTF-8">';
         public ?array        $html           = [];
         public ?array        $link           = [];
@@ -16,13 +18,38 @@
         
         public function getTitle(): string
         {
-            
-            return $this->title;
+            return "<title>$this->title</title>";
+//             $this->title;
         }
         
         public function setTitle(?string $title): self
         {
-            $this->title =  "<title>$title</title>";
+            $this->title =  $title;
+            return $this;
+        }
+        
+        public function getPreFixTitle(): ?string
+        {
+            return $this->preFixTitle;
+        }
+        
+        public function setPreFixTitle(?string $preFixTitle): self
+        {
+            
+            $this->setTitle($preFixTitle . " ". $this->title);
+            $this->preFixTitle = $preFixTitle;
+            return $this;
+        }
+        
+        public function getSurFixTitle(): ?string
+        {
+            return $this->surFixTitle;
+        }
+        
+        public function setSurFixTitle(?string $surFixTitle): self
+        {
+            $this->title =  "<title>$this->title $preFixTitle</title>";
+            $this->surFixTitle =  $surFixTitle;
             return $this;
         }
         
