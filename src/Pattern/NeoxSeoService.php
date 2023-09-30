@@ -40,6 +40,9 @@
         
         public function getSeoBag(): SeoBag
         {
+            if (!$this->seoBag) {
+                $this->init();
+            }
             return $this->seoBag;
         }
         
