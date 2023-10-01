@@ -55,8 +55,8 @@ It set automatique but you can custom
               metasHttpEquiv:
                   content-type:       "text/html; charset=utf-8"
                   x-ua-compatible:    "IE=edge"
-                  viewport:           "width=device-width, initial-scale=1"
               metasName:
+                  viewport:           "width=device-width, initial-scale=1"
                   description: |
                       %name_projet% ....
                   image: '%web_site%/images/logo/logoWhite.png' # This one is shared by open graph and twitter only
