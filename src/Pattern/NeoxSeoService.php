@@ -64,7 +64,7 @@
             return $this->seoBag;
         }
         
-        private function setUriCanonical()
+        private function setUriCanonical(): void
         {
             if ($this->seoParams["link"]["canonical"] === "auto") {
                 $uri                = $this->requestStack->getCurrentRequest()->getUri();
