@@ -90,9 +90,9 @@
         {
             // <link rel="alternate" hreflang="fr" href="https://www.gentianes.wip"/>
             foreach ($link as $key => $value) {
-                $key = strtolower($key);
-                list($key) = explode("@", $key) ?? $key;
-                $this->link[] = "<link rel='$key' $value/>";
+                $key        = strtolower($key);
+                list($rel)  = explode("@", $key) ?? $key;
+                $this->link[$key] = "<link rel='$rel' $value/>";
             }
             return $this;
         }

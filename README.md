@@ -48,6 +48,7 @@ It set automatique but you can custom
           title: '%name_projet% Bienvenue | Creation de site web, mobile, application station'
           charset: "utf-8"
           link:
+              canonical: auto #href="%web_site%"
               alternate@FR: hreflang="fr" href="https://www.xxxxx.wip/fr"
               alternate@En: hreflang="en" href="https://www.xxxxx.wip/en"
               icon:       href="data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg viewBox=0 0 128 128><text y=1.2em font-size=96>⚫️</text></svg>"
