@@ -69,10 +69,15 @@
         
         private function setUriCanonical(): void
         {
-            if ($this->seoParams["link"]["canonical"] === "auto") {
-                $uri                = $this->requestStack->getCurrentRequest()->getUri();
+            if (isset($this->seoParams["link"]["canonical"]) && $this->seoParams["link"]["canonical"] === "auto") {
+                $uri = $this->requestStack->getCurrentRequest()->getUri();
                 $this->seoBag->setLink(['canonical' => "href='$uri'"]);
             }
+
+//            if ($this->seoParams["link"]["canonical"] === "auto") {
+//                $uri                = $this->requestStack->getCurrentRequest()->getUri();
+//                $this->seoBag->setLink(['canonical' => "href='$uri'"]);
+//            }
             
         }
         private function getAttributesFromControllerAndMethod(): array
