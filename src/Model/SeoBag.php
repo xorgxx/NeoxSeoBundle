@@ -106,7 +106,7 @@
         {
             foreach ($httpEquiv as $key => $value) {
                 $key = strtolower($key);
-                $this->metasHttpEquiv[$key] = "<meta http-equiv='$key' content='$value'/>";
+                $this->metasHttpEquiv[$key] = "<meta http-equiv='$key' content=" . '"' . $value .'"' . "/>";
             }
             return $this;
         }
@@ -127,7 +127,7 @@
                 // twitter:card & facebook  :opengraph
                 $key = strtolower($key);
                 $key = str_replace("-", ":", $key);
-                $this->metasName[strtolower($key)] = "<meta name='$key' content='$value'/>";
+                $this->metasName[strtolower($key)] = "<meta name='$key' content=" . '"' . $value .'"' . "/>";
             }
             return $this;
         }
@@ -143,7 +143,7 @@
                 // twitter:card & facebook  :opengraph
                 $key = strtolower($key);
                 $key = str_replace("-", ":", $key);
-                $this->metasProperty[strtolower($key)] = "<meta property='$key' content='$value'/>";
+                $this->metasProperty[strtolower($key)] = "<meta property='$key' content=" . '"' . $value .'"' . "/>";
             }
             return $this;
         }
@@ -156,7 +156,7 @@
         public function setMetasItemprop(?array $metasItemprop): self
         {
             foreach ($metasItemprop as $key => $value) {
-                $this->metasItemprop[strtolower($key)] = "<meta itemprop='$key' content='$value'/>";
+                $this->metasItemprop[strtolower($key)] = "<meta itemprop='$key' content=" . '"' . $value .'"' . "/>";
             }
             return $this;
         }
