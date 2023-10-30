@@ -1,100 +1,169 @@
 <?php
     
-    namespace NeoxSeo\NeoxSeoBundle\Pattern;
+    namespace NeoxSeo\NeoxSeoBundle\Model;
     
-    use NeoxSeo\NeoxSeoBundle\Attribute\NeoxSeo;
-    use NeoxSeo\NeoxSeoBundle\Model\SeoBag;
-    use ReflectionClass;
-    use ReflectionMethod;
-    use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-    use Symfony\Component\HttpFoundation\RequestStack;
-    
-    class NeoxSeoService
+    class SeoBag
     {
-        private array $seoParams = [];
-        public ?SeoBag $seoBag = null;
-        private string $controller;
-        private string $action;
+        public ?string       $title          = "ko";
+        public ?string       $preFixTitle    = null;
+        public ?string       $surFixTitle    = null;
+        public ?string       $charset        = '<meta charset="UTF-8">';
+        public ?array        $html           = [];
+        public ?array        $link           = [];
+        public ?array        $metasHttpEquiv = [];
+        public ?array        $metasName      = [];
+        public ?array        $metasProperty  = [];
+        public ?array        $metasItemprop  = [];
         
-        public function __construct(private readonly RequestStack $requestStack, private readonly ParameterBagInterface $parameterBag)
+        
+        public function getTitle(): string
         {
-        
+            return "<title>$this->title</title>";
+//             $this->title;
         }
         
-        public function setNeoxSeo(): SeoBag
+        public function setTitle(?string $title): self
         {
-            $attributes = $this->getAttributesFromControllerAndMethod();
+            $this->title =  $title;
+            return $this;
+        }
+        
+        public function getPreFixTitle(): ?string
+        {
+            return $this->preFixTitle;
+        }
+        
+        public function setPreFixTitle(?string $preFixTitle): self
+        {
             
-            foreach ($attributes as $attribute) {
-                foreach ($attribute->newInstance() as $key => $value) {
-                    if ($value) {
-                        $setter = "set" . $key;
-                        $this->seoBag->$setter($value);
-                    }
-                }
-            }
-            return $this->seoBag;
+            $this->setTitle($preFixTitle . " ". $this->title);
+            $this->preFixTitle = $preFixTitle;
+            return $this;
         }
         
-        public function getSeoBag(): SeoBag
+        public function getSurFixTitle(): ?string
         {
-            if (!$this->seoBag) {
-                $this->init();
-            }
-            return $this->seoBag;
+            return $this->surFixTitle;
         }
         
-        public function init(): seoBag
+        public function setSurFixTitle(?string $surFixTitle): self
         {
-            // Get the SEO configuration
-            $this->seoParams = $this->parameterBag->get('neox_seo.seo');
-            if (!$this->seoBag) {
-                $this->seoBag = new seoBag();
-                $this->seoBag
-                    ->setTitle($this->seoParams['title'] ?? null)
-                    ->setCharset($this->seoParams['charset'] ?? null)
-                    ->setLink($this->seoParams['link'] ?? [])
-                    ->setHtml($this->seoParams['html'] ?? [])
-                    ->setMetasHttpEquiv($this->seoParams["metas"]['metasHttpEquiv'] ?? [])
-                    ->setMetasName($this->seoParams["metas"]['metasName'] ?? [])
-                    ->setMetasProperty($this->seoParams["metas"]['metasProperty'] ?? [])
-                    ->setMetasItemprop($this->seoParams["metas"]['metasItemprop'] ?? []);
-            }
-            
-            $this->setNeoxSeo();
-            $this->setUriCanonical();
-            
-            return $this->seoBag;
+            $this->title =  "<title>$this->title $preFixTitle</title>";
+            $this->surFixTitle =  $surFixTitle;
+            return $this;
         }
         
-        private function setUriCanonical(): void
+        public function getCharset(): ?string
         {
-            if (isset($this->seoParams["link"]["canonical"]) && $this->seoParams["link"]["canonical"] === "auto") {
-                $uri = $this->requestStack->getCurrentRequest()->getUri();
-                $this->seoBag->setLink(['canonical' => "href='$uri'"]);
-            }
-
-//            if ($this->seoParams["link"]["canonical"] === "auto") {
-//                $uri                = $this->requestStack->getCurrentRequest()->getUri();
-//                $this->seoBag->setLink(['canonical' => "href='$uri'"]);
-//            }
+            return $this->charset;
+        }
+        
+        public function setCharset(?string $encoding): self
+        {
+            $this->charset = "<meta charset=$encoding/>";
+            return $this;
             
         }
-        private function getAttributesFromControllerAndMethod(): array
+        
+        public function getHtml(): ?array
         {
-            $this->getInfoAboutCurrentRequest();
-            $classAttributes    = (new ReflectionClass($this->controller))->getAttributes(NeoxSeo::class);
-            $methodAttributes   = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxSeo::class);
-            return array_merge($classAttributes, $methodAttributes);
+            return $this->html;
         }
         
-        private function getInfoAboutCurrentRequest(): void
+        public function setHtml(?array $html): self
         {
-            $request = $this->requestStack->getCurrentRequest();
-            
-            if ($request) {
-                $controllerName = $request->attributes->get('_controller');
-                list($this->controller, $this->action) = explode('::', $controllerName);
+            // <html lang="fr" href="https://www.gentianes.wip"/>
+            foreach ($html as $key => $value) {
+                $key = strtolower($key);
+                $this->html[$key] = $key . "=" . "'$value'";
             }
+            return $this;
         }
+        
+        
+        public function getLink(): array
+        {
+            return $this->link;
+        }
+        
+        public function setLink(?array $link): self
+        {
+            // <link rel="alternate" hreflang="fr" href="https://www.gentianes.wip"/>
+            foreach ($link as $key => $value) {
+                $key        = strtolower($key);
+                list($rel)  = explode("@", $key) ?? $key;
+                $this->link[$key] = "<link rel='$rel' $value/>";
+            }
+            return $this;
+        }
+        
+        public function getMetasHttpEquiv(): array
+        {
+            return $this->metasHttpEquiv;
+        }
+        
+        public function setMetasHttpEquiv(?array $httpEquiv): self
+        {
+            foreach ($httpEquiv as $key => $value) {
+                $key = strtolower($key);
+                $this->metasHttpEquiv[$key] = "<meta http-equiv='$key' content=" . '"' . $value .'"' . "/>";
+            }
+            return $this;
+        }
+        
+        public function getMetasName(): array
+        {
+            return $this->metasName;
+        }
+        
+        /**
+         * @param array|null $metasName
+         *
+         * @return $this
+         */
+        public function setMetasName(?array $metasName): self
+        {
+            foreach ($metasName as $key => $value) {
+                // twitter:card & facebook  :opengraph
+                $key = strtolower($key);
+                $key = str_replace("-", ":", $key);
+                $this->metasName[strtolower($key)] = "<meta name='$key' content=" . '"' . $value .'"' . "/>";
+            }
+            return $this;
+        }
+        
+        public function getMetasProperty(): array
+        {
+            return $this->metasProperty;
+        }
+        
+        public function setMetasProperty(?array $metasProperty): self
+        {
+            foreach ($metasProperty as $key => $value) {
+                // twitter:card & facebook  :opengraph
+                $key = strtolower($key);
+                $key = str_replace("-", ":", $key);
+                $this->metasProperty[strtolower($key)] = "<meta property='$key' content=" . '"' . $value .'"' . "/>";
+            }
+            return $this;
+        }
+        
+        public function getMetasItemprop(): array
+        {
+            return $this->metasItemprop;
+        }
+        
+        public function setMetasItemprop(?array $metasItemprop): self
+        {
+            foreach ($metasItemprop as $key => $value) {
+                $this->metasItemprop[strtolower($key)] = "<meta itemprop='$key' content=" . '"' . $value .'"' . "/>";
+            }
+            return $this;
+        }
+        
+        public function getAllMetas(): ?array
+        {
+            return $this->metasHttpEquiv + $this->metasName + $this->metasProperty + $this->metasItemprop;
+        }
+        
     }
