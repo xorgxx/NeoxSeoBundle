@@ -77,6 +77,10 @@ By attribute name
 ```php
     myController.php
     <?php
+    
+    use NeoxSeo\NeoxSeoBundle\Attribute\NeoxSeo;
+    ....
+    
     #[NeoxSeo( title: 'home page', charset: 'UTF-8', metasHttpEquiv: ['Content-Type'=>'text/html; charset=utf-4', 'Accept'=>'text/html; charset=utf-8'])]
     class HomeController extends _CoreController
     {
