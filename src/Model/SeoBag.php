@@ -16,10 +16,9 @@
         public ?array        $metasItemprop  = [];
         
         
-        public function getTitle(): string
+        public function getTitle(): ?string
         {
-            return "<title>$this->title</title>";
-//             $this->title;
+            return $this->title;
         }
         
         public function setTitle(?string $title): self
@@ -36,7 +35,6 @@
         public function setPreFixTitle(?string $preFixTitle): self
         {
             
-            $this->setTitle($preFixTitle . " ". $this->title);
             $this->preFixTitle = $preFixTitle;
             return $this;
         }
@@ -48,7 +46,6 @@
         
         public function setSurFixTitle(?string $surFixTitle): self
         {
-            $this->title =  "<title>$this->title $preFixTitle</title>";
             $this->surFixTitle =  $surFixTitle;
             return $this;
         }

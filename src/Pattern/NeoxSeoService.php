@@ -11,8 +11,8 @@
     
     class NeoxSeoService
     {
-        private array $seoParams = [];
-        public ?SeoBag $seoBag = null;
+        private array $seoParams    = [];
+        public ?SeoBag $seoBag      = null;
         private string $controller;
         private string $action;
         
@@ -21,12 +21,25 @@
         
         }
         
+        public function getSeoBag(): SeoBag
+        {
+            if (!$this->seoBag) {
+                $this->setNeoxSeo();
+                $this->setUriCanonical();
+            }
+            return $this->seoBag;
+        }
+        
         public function setNeoxSeo(): SeoBag
         {
-            $attributes = $this->getAttributesFromControllerAndMethod();
+            // first apply seo settings from configuration
+            $this->setSeoParams();
             
+            // then apply the controller and method attributes
+            $attributes = $this->getAttributesFromControllerAndMethod();
             foreach ($attributes as $attribute) {
-                foreach ($attribute->newInstance() as $key => $value) {
+                $data = $attribute->newInstance();
+                foreach ($data as $key => $value) {
                     if ($value) {
                         $setter = "set" . $key;
                         $this->seoBag->$setter($value);
@@ -36,35 +49,19 @@
             return $this->seoBag;
         }
         
-        public function getSeoBag(): SeoBag
+        private function setSeoParams(): void
         {
-            if (!$this->seoBag) {
-                $this->init();
-            }
-            return $this->seoBag;
-        }
-        
-        public function init(): seoBag
-        {
-            // Get the SEO configuration
-            $this->seoParams = $this->parameterBag->get('neox_seo.seo');
-            if (!$this->seoBag) {
-                $this->seoBag = new seoBag();
-                $this->seoBag
-                    ->setTitle($this->seoParams['title'] ?? null)
-                    ->setCharset($this->seoParams['charset'] ?? null)
-                    ->setLink($this->seoParams['link'] ?? [])
-                    ->setHtml($this->seoParams['html'] ?? [])
-                    ->setMetasHttpEquiv($this->seoParams["metas"]['metasHttpEquiv'] ?? [])
-                    ->setMetasName($this->seoParams["metas"]['metasName'] ?? [])
-                    ->setMetasProperty($this->seoParams["metas"]['metasProperty'] ?? [])
-                    ->setMetasItemprop($this->seoParams["metas"]['metasItemprop'] ?? []);
-            }
-            
-            $this->setNeoxSeo();
-            $this->setUriCanonical();
-            
-            return $this->seoBag;
+            $this->seoBag           = new SeoBag();
+            $this->seoParams        = $this->parameterBag->get('neox_seo.seo');
+            $this->seoBag
+                ->setTitle($this->seoParams ['title'] ?? null)
+                ->setCharset($this->seoParams ['charset'] ?? null)
+                ->setLink($this->seoParams ['link'] ?? [])
+                ->setHtml($this->seoParams ['html'] ?? [])
+                ->setMetasHttpEquiv($this->seoParams ['metas']['metasHttpEquiv'] ?? [])
+                ->setMetasName($this->seoParams ['metas']['metasName'] ?? [])
+                ->setMetasProperty($this->seoParams ['metas']['metasProperty'] ?? [])
+                ->setMetasItemprop($this->seoParams ['metas']['metasItemprop'] ?? []);
         }
         
         private function setUriCanonical(): void
@@ -73,12 +70,7 @@
                 $uri = $this->requestStack->getCurrentRequest()->getUri();
                 $this->seoBag->setLink(['canonical' => "href='$uri'"]);
             }
-
-//            if ($this->seoParams["link"]["canonical"] === "auto") {
-//                $uri                = $this->requestStack->getCurrentRequest()->getUri();
-//                $this->seoBag->setLink(['canonical' => "href='$uri'"]);
-//            }
-        
+            
         }
         private function getAttributesFromControllerAndMethod(): array
         {

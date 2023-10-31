@@ -56,7 +56,7 @@
             // Il s'agit de la requête principale
             $controller = $event->getRequest()->attributes->get('_controller');
             if (!$this->isProfilerController($controller)) {
-                $this->neoxSeoService->init();
+                $this->neoxSeoService->getSeoBag();
             }
         }
         private function isProfilerController($controller): bool

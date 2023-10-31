@@ -48,7 +48,7 @@
         
         public function neoxSeoTitle(): string
         {
-            return $this->neoxSeoService->getSeoBag()->getTitle();
+            return '<title>' . ($this->neoxSeoService->getSeoBag()->getPreFixTitle() . ' ' ?? null) . $this->neoxSeoService->getSeoBag()->getTitle() . (' ' . $this->neoxSeoService->getSeoBag()->getSurFixTitle() ?? null) .'</title>' ;
         }
         
         public function neoxSeoName(): string

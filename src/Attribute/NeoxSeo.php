@@ -36,8 +36,10 @@
     class NeoxSeo extends SeoBag
     {
         public function __construct(
-            public ?string       $title          = "<title>Seo-default</title>",
-            public ?string       $charset        = '<meta charset="UTF-8">',
+            public ?string       $title          = null,
+            public ?string       $preFixTitle    = null,
+            public ?string       $surFixTitle    = null,
+            public ?string       $charset        = null,
             public ?array        $link           = [],
             public ?array        $metasHttpEquiv = [],
             public ?array        $metasName      = [],
