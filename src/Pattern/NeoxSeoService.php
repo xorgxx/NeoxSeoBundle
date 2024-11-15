@@ -13,8 +13,8 @@
     {
         private array $seoParams    = [];
         public ?SeoBag $seoBag      = null;
-        private string $controller;
-        private string $action;
+        private ?string $controller = null;
+        private ?string $action     = null;
         
         public function __construct(private readonly RequestStack $requestStack, private readonly ParameterBagInterface $parameterBag)
         {
@@ -72,12 +72,31 @@
             }
             
         }
+//        private function getAttributesFromControllerAndMethod(): array
+//        {
+//            $this->getInfoAboutCurrentRequest();
+//            $classAttributes    = (new ReflectionClass($this->controller))->getAttributes(NeoxSeo::class);
+//            $methodAttributes   = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxSeo::class);
+//            return array_merge($classAttributes, $methodAttributes);
+//        }
+
         private function getAttributesFromControllerAndMethod(): array
         {
             $this->getInfoAboutCurrentRequest();
-            $classAttributes    = (new ReflectionClass($this->controller))->getAttributes(NeoxSeo::class);
-            $methodAttributes   = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxSeo::class);
-            return array_merge($classAttributes, $methodAttributes);
+
+            if (!$this->controller || !$this->action) {
+                return [];
+            }
+
+            try {
+                $classAttributes = (new ReflectionClass($this->controller))->getAttributes(NeoxNotifyAlert::class);
+                $methodAttributes = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxNotifyAlert::class);
+
+                return array_merge($classAttributes, $methodAttributes);
+            } catch (\ReflectionException $e) {
+                // Log ou gérer l'erreur
+                return [];
+            }
         }
         
         private function getInfoAboutCurrentRequest(): void
