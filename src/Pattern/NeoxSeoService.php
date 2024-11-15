@@ -98,14 +98,30 @@
                 return [];
             }
         }
-        
+
         private function getInfoAboutCurrentRequest(): void
         {
             $request = $this->requestStack->getCurrentRequest();
-            
+
             if ($request) {
                 $controllerName = $request->attributes->get('_controller');
-                list($this->controller, $this->action) = explode('::', $controllerName);
+
+                if (is_string($controllerName) && strpos($controllerName, '::') !== false) {
+                    list($this->controller, $this->action) = explode('::', $controllerName);
+                } else {
+                    // Gère les cas où le contrôleur est invalide
+                    $this->controller = null;
+                    $this->action = null;
+                }
             }
         }
+//        private function getInfoAboutCurrentRequest(): void
+//        {
+//            $request = $this->requestStack->getCurrentRequest();
+//
+//            if ($request) {
+//                $controllerName = $request->attributes->get('_controller');
+//                list($this->controller, $this->action) = explode('::', $controllerName);
+//            }
+//        }
     }
