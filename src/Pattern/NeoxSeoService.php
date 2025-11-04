@@ -89,8 +89,8 @@
             }
 
             try {
-                $classAttributes = (new ReflectionClass($this->controller))->getAttributes(NeoxNotifyAlert::class);
-                $methodAttributes = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxNotifyAlert::class);
+                $classAttributes = (new ReflectionClass($this->controller))->getAttributes(NeoxSeo::class);
+                $methodAttributes = (new ReflectionMethod($this->controller, $this->action))->getAttributes(NeoxSeo::class);
 
                 return array_merge($classAttributes, $methodAttributes);
             } catch (\ReflectionException $e) {
